@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  node_backend:
+    container_name: node-js_api
+    image: nodejs:0.0.1
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    environment:
+      - EXTERNAL_PORT=3001
+      - PGDATABASE=node-js_db
+      - PGUSER=filip
+      - PGPASSWORD="12345"
+      - PGHOST=localhost
+    depends_on:
+      - nodejs_db
+  nodejs_db:
+    container_name: node-js_db
+    image: "mysql:8"
+    ports:
+      - "3306:3306"
+    environment:
+      - POSTGRES_USER=filip
+      - MYSQL_ROOT_PASSWORD="12345"
+      - POSTGRES_DB=node-js_db
+    volumes:
+      - nps_data:/var/lib/postgresql/data
+
+volumes:
+  nps_data: {}
