@@ -1,25 +1,30 @@
-const http      = require('http')
-const express = require('express');
 
-const sequelize = require('./app/util/database');
-const User = require('./app/models/users');
+const require =  createRequire(import.meta.url);
+const express = require('express')
+const app = express()
+// require ('dotenv').config()
 
-const app = express();
-const server = http.createServer(app);
-server.listen(3000);
+import { request } from 'http';
+import { createRequire } from 'module';
+import { getProizvodjaci } from './proizvodjac.js'
+import { getProizvodi } from './proizvodi.js'
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
+app.get('/', async function (request, response) {
+    // const proizvodId = response.query.proizvod_id
+    // const proizvodjacId = response.query.proizvod_id
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin','*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET','POST');
-  next();
+
+    const Proizvodjaci = await getProizvodjaci(1)
+    const Proizvodi = await getProizvodi(1,1 )
+    const data = [Proizvodi, Proizvodjaci]
+    response.status(200).send(JSON.stringify(data))
 })
-
-app.use('/dev', require('./app/routes/dev'));
-app.use('/users', require('./app/routes/users'));
-
-app.get('/get', async function(request, response){
-  return console.log("HELLLLOOOOO")
+app.post('/', async function (request, response) {
+    const Proizvodjaci = await getProizvodjaci(1)
+    const Proizvodi = await getProizvodi(1,1 )
+    const data = [Proizvodi, Proizvodjaci]
+    response.status(200).send(JSON.stringify(data))
 })
+app.listen(3000)
+
+console.log("listening on port 3000")

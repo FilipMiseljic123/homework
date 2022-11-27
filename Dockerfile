@@ -6,10 +6,14 @@ WORKDIR /src
 
 RUN npm install i npm@latest -g
 
-COPY package.json package-lock*.json ./
+RUN apt-get update
+
+RUN npm install -g nodemon
+
+COPY . .
 
 RUN npm install
 
 COPY . .
 
-CMD ["node", "index.js"]
+CMD ["nodemon"]
